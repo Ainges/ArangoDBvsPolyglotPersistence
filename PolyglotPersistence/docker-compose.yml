@@ -1,0 +1,63 @@
+version: "3.8"
+
+services:
+  neo4j:
+    image: neo4j:5.10
+    container_name: poly_neo4j
+    restart: unless-stopped
+    ports:
+      - "7474:7474" # HTTP (Browser)
+      - "7687:7687" # BOLT
+    environment:
+      # Authentication disabled for local development (INSECURE)
+      NEO4J_AUTH: "none"
+    volumes:
+      - poly_neo4j_data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:7474/ || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: poly_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    # No AUTH by default here (INSECURE). To enable auth, set requirepass in redis.conf or use redis:alpine with REDIS_PASSWORD
+    volumes:
+      - poly_redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  mongo:
+    image: mongo:6.0
+    container_name: poly_mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      # Simple root credentials for local development
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    volumes:
+      - poly_mongo_data:/data/db
+    healthcheck:
+      test: ["CMD-SHELL", "mongo --eval \"db.adminCommand('ping')\" || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  poly_neo4j_data:
+  poly_redis_data:
+  poly_mongo_data:
+
+# Notes:
+# - These services are configured with minimal/simple credentials for local development.
+# - Do NOT expose these to public networks with these settings.
+# - If you need to secure them, use stronger passwords, .env files, or Docker secrets.

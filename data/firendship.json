@@ -1,0 +1,12 @@
+[
+  { "_from": "users/alice",   "_to": "users/bob"     },
+  { "_from": "users/alice",   "_to": "users/charlie" },
+  { "_from": "users/bob",     "_to": "users/eve"     },
+  { "_from": "users/bob",     "_to": "users/diana"   },
+  { "_from": "users/charlie", "_to": "users/alice"   },
+  { "_from": "users/charlie", "_to": "users/frank"   },
+  { "_from": "users/diana",   "_to": "users/frank"   },
+  { "_from": "users/eve",     "_to": "users/alice"   },
+  { "_from": "users/eve",     "_to": "users/bob"     },
+  { "_from": "users/frank",   "_to": "users/diana"   }
+]

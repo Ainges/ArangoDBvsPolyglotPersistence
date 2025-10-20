@@ -1,0 +1,7 @@
+[
+  { "_from": "users/bob",     "_to": "posts/p1", "type":"like" },
+  { "_from": "users/charlie", "_to": "posts/p1", "type":"like" },
+  { "_from": "users/alice",   "_to": "posts/p2", "type":"like" },
+  { "_from": "users/eve",     "_to": "posts/p2", "type":"like" },
+  { "_from": "users/frank",   "_to": "posts/p5", "type":"like" }
+]

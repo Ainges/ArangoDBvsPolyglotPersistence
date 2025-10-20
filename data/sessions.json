@@ -1,0 +1,8 @@
+[
+  { "user":"alice","last_active":"2024-10-17T14:50:00Z","online":true,"device":"mobile" },
+  { "user":"bob","last_active":"2024-10-17T14:55:00Z","online":true,"device":"desktop" },
+  { "user":"charlie","last_active":"2024-10-17T10:20:00Z","online":false,"device":"mobile" },
+  { "user":"diana","last_active":"2024-10-16T22:15:00Z","online":false,"device":"tablet" },
+  { "user":"eve","last_active":"2024-10-17T14:48:00Z","online":true,"device":"desktop" },
+  { "user":"frank","last_active":"2024-10-17T08:30:00Z","online":false,"device":"mobile" }
+]

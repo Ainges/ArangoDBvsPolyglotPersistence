@@ -1,0 +1,7 @@
+[
+  { "id":"p1","user":"alice","content":"Wanderweg in den Alpen entdeckt!","timestamp":"2024-10-15T10:30:00Z","likes":12,"tags":["hiking","travel"] },
+  { "id":"p2","user":"bob","content":"Neues Python-Framework ausprobiert","timestamp":"2024-10-16T14:20:00Z","likes":8,"tags":["programming","tech"] },
+  { "id":"p3","user":"charlie","content":"Sonnenuntergang am Brandenburger Tor","timestamp":"2024-10-16T19:45:00Z","likes":25,"tags":["photography","Berlin"] },
+  { "id":"p4","user":"eve","content":"Wer kennt gute Indie-Games?","timestamp":"2024-10-17T09:15:00Z","likes":5,"tags":["gaming"] },
+  { "id":"p5","user":"diana","content":"Ramen selbstgemacht!","timestamp":"2024-10-17T12:00:00Z","likes":18,"tags":["cooking","food"] }
+]

@@ -1,0 +1,8 @@
+[
+  { "id": "alice",   "name": "Alice Müller",   "age": 28, "city": "Berlin",  "interests": ["programming","hiking","photography"] },
+  { "id": "bob",     "name": "Bob Schmidt",    "age": 32, "city": "München",  "interests": ["programming","gaming","music"] },
+  { "id": "charlie", "name": "Charlie Weber",  "age": 25, "city": "Berlin",  "interests": ["hiking","travel","photography"] },
+  { "id": "diana",   "name": "Diana Fischer",  "age": 30, "city": "Hamburg", "interests": ["music","travel","cooking"] },
+  { "id": "eve",     "name": "Eve Becker",     "age": 27, "city": "Berlin",  "interests": ["programming","travel","gaming"] },
+  { "id": "frank",   "name": "Frank Wagner",   "age": 35, "city": "Köln",    "interests": ["photography","cooking","music"] }
+]
