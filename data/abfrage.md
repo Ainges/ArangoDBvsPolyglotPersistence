@@ -1,0 +1,1 @@
+Zeige mir die aktuell online befindlichen Freunde von Alice, die in den letzten 24 Stunden einen Post erstellt oder geliked haben.
