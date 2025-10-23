@@ -11,7 +11,6 @@ import com.arangodb.ArangoCursor;
 import com.arangodb.ArangoDB;
 import com.arangodb.ArangoDatabase;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
 
@@ -40,13 +39,14 @@ public class SocialFeedResource {
                     RETURN PARSE_IDENTIFIER(edge._to).key
             )
             LET onlineFriends = (
-                FOR status IN users
-                    FILTER status.user IN friends
-                    FILTER status.online == true
-                    FOR u IN users
-                        FILTER u.id == status.user
-                        RETURN MERGE(u, status)
-            )
+                        FOR session IN sessions
+                            FILTER session.online == true
+                            FILTER session.user IN friends
+                            FOR u IN users
+                                FILTER u.id == session.user
+                                RETURN MERGE(u, session)
+                    )
+        
             LET posts = (
                 FOR p IN posts
                     FILTER p.user IN onlineFriends[*].id
@@ -73,17 +73,11 @@ public class SocialFeedResource {
                     likes[*].user
                 )
             )
-            LET activeFriendsOnline = (
-                FOR f IN onlineFriends
-                    FILTER f.id IN activeUserIds
-                    RETURN f
-            )
             RETURN {
-                user: @userId,
                 friends: friends,
-                onlineFriends: onlineFriends,
-                activeFriendsOnline: activeFriendsOnline,
-                posts: posts
+                user: @userId,
+                posts: posts,
+                onlineFriends: onlineFriends
             }
         """;
 
@@ -108,10 +102,10 @@ public class SocialFeedResource {
 
         // Fallback, falls keine Daten gefunden wurden
         return Map.of(
-                "user", userId,
                 "friends", new ArrayList<>(),
-                "onlineFriends", new ArrayList<>(),
-                "posts", new ArrayList<>()
+                "posts", new ArrayList<>(),
+                "user", userId,
+                "onlineFriends", new ArrayList<>()
         );
     }
 }

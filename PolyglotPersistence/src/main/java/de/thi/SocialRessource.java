@@ -27,10 +27,11 @@ public class SocialRessource {
         List<Document> posts = socialService.getRecentPostsFromMongo(onlineFriends, since);
 
         return Map.of(
-                "user", userId,
                 "friends", friends,
-                "onlineFriends", onlineFriends,
-                "posts", posts
+                "posts", posts,
+                "user", userId,
+                "onlineFriends", onlineFriends
+
         );
     }
 }
