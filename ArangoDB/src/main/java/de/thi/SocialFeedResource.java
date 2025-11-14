@@ -24,8 +24,8 @@ public class SocialFeedResource {
     @GET
     @Path("/feed")
     public Map<String, Object> getSocialFeed(
-            @QueryParam("user") String userId,
-            @QueryParam("hours") @DefaultValue("24") int hours
+            @QueryParam("user") @DefaultValue("alice") String userId,
+            @QueryParam("hours") @DefaultValue("36000") int hours
     ) {
         // Datenbank-Instanz holen
         ArangoDatabase db = arangoDB.db("_system");
