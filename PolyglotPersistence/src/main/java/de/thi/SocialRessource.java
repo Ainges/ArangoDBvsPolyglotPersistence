@@ -3,7 +3,7 @@ package de.thi;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
-import org.bson.Document;
+
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -14,7 +14,8 @@ import java.util.Map;
 @Produces(MediaType.APPLICATION_JSON)
 public class SocialRessource {
 
-    @Inject SocialService socialService;
+    @Inject
+    SocialService socialService;
 
     @GET
     public Map<String, Object> getSocialFeed(
@@ -23,8 +24,8 @@ public class SocialRessource {
     ) {
         Instant since = Instant.now().minus(hours, ChronoUnit.HOURS);
         List<String> friends = socialService.getFriendsFromNeo4j(userId);
-        List<String> onlineFriends = socialService.getOnlineFriendsFromRedis(friends);
-        List<Document> posts = socialService.getRecentPostsFromMongo(onlineFriends, since);
+        List<String> onlineFriends = socialService.getOnlineFriendsOfUser(friends);
+        List<Map<String, Object>> posts = socialService.getPostsOfOnlineFriendsSince(onlineFriends, since);
 
         return Map.of(
                 "friends", friends,
