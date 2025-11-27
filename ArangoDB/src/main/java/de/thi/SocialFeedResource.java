@@ -25,7 +25,7 @@ public class SocialFeedResource {
     @Path("/feed")
     public Map<String, Object> getSocialFeed(
             @QueryParam("user") @DefaultValue("alice") String userId,
-            @QueryParam("hours") @DefaultValue("36000") int hours
+            @QueryParam("hours") @DefaultValue("17520") int hours // = 24*365*2 -> 2 years
     ) {
         // Datenbank-Instanz holen
         ArangoDatabase db = arangoDB.db("_system");
@@ -73,11 +73,12 @@ public class SocialFeedResource {
                     likes[*].user
                 )
             )
+            LET onlineFriendIds = UNIQUE(onlineFriends[*].id)
             RETURN {
                 friends: friends,
                 user: @userId,
                 posts: posts,
-                onlineFriends: onlineFriends
+                onlineFriends: onlineFriendIds
             }
         """;
 
@@ -89,9 +90,9 @@ public class SocialFeedResource {
         // Query ausführen
         ArangoCursor<Map> cursor = db.query(
                 query,
-                Map.class,           // Type zuerst
-                bindVars,            // Dann bindVars
-                null                 // Dann options (kann null sein)
+                Map.class,
+                bindVars,
+                null
         );
 
 

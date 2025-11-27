@@ -20,7 +20,7 @@ public class SocialRessource {
     @GET
     public Map<String, Object> getSocialFeed(
             @QueryParam("user") @DefaultValue("alice") String userId,
-            @QueryParam("hours") @DefaultValue("36000") int hours
+            @QueryParam("hours") @DefaultValue("17520") int hours // = 24*365*2 -> 2 years
     ) {
         Instant since = Instant.now().minus(hours, ChronoUnit.HOURS);
         List<String> friends = socialService.getFriendsFromNeo4j(userId);
