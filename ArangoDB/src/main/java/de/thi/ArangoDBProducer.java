@@ -1,6 +1,7 @@
 package de.thi;
 
 import com.arangodb.ArangoDB;
+import com.arangodb.ArangoDatabase;
 import com.arangodb.Protocol;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Produces;
@@ -15,6 +16,8 @@ public class ArangoDBProducer {
     @ConfigProperty(name = "arangodb.port", defaultValue = "8529")
     int port;
 
+    @ConfigProperty(name = "arangodb.database", defaultValue = "_system")
+    String databaseName;
 
     @Produces
     @ApplicationScoped
@@ -23,5 +26,11 @@ public class ArangoDBProducer {
                 .host(host, port)
                 .protocol(Protocol.HTTP_JSON)
                 .build();
+    }
+
+    @Produces
+    @ApplicationScoped
+    public ArangoDatabase arangoDatabase(ArangoDB arangoDB) {
+        return arangoDB.db(databaseName);
     }
 }

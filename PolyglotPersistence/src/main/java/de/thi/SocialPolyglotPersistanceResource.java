@@ -12,7 +12,7 @@ import java.util.Map;
 
 @Path("/api/social")
 @Produces(MediaType.APPLICATION_JSON)
-public class SocialRessource {
+public class SocialPolyglotPersistanceResource {
 
     @Inject
     SocialService socialService;
@@ -23,7 +23,7 @@ public class SocialRessource {
             @QueryParam("hours") @DefaultValue("17520") int hours // = 24*365*2 -> 2 years
     ) {
         Instant since = Instant.now().minus(hours, ChronoUnit.HOURS);
-        List<String> friends = socialService.getFriendsFromNeo4j(userId);
+        List<String> friends = socialService.getFriendsOfUser(userId);
         List<String> onlineFriends = socialService.getOnlineFriendsOfUser(friends);
         List<Map<String, Object>> posts = socialService.getPostsOfOnlineFriendsSince(onlineFriends, since);
 

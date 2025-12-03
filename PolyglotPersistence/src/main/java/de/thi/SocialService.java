@@ -22,7 +22,7 @@ public class SocialService {
     @Inject
     SessionRepository sessionRepository;
 
-    public List<String> getFriendsFromNeo4j(String userId) {
+    public List<String> getFriendsOfUser(String userId) {
         return friendsRepository.getFriendsOfUser(userId);
     }
 

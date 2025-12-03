@@ -1,0 +1,105 @@
+package de.thi.adapter;
+
+import com.arangodb.ArangoCursor;
+import com.arangodb.ArangoDB;
+import com.arangodb.ArangoDatabase;
+import de.thi.ports.SocialQueryRepository;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+@ApplicationScoped
+public class ArangoDbService implements SocialQueryRepository {
+
+    @Inject
+    ArangoDB arangoDB;
+
+    @Override
+    public Map<String, Object> queryPostsOfOnlineFriends(String userId, int hours) {
+        // Datenbank-Instanz holen
+        ArangoDatabase db = arangoDB.db("_system");
+
+        // AQL Query definieren
+        String query = """
+                    LET hoursAgo = DATE_SUBTRACT(DATE_NOW(), @hours, "hours")
+                    LET friends = (
+                        FOR edge IN friendships
+                            FILTER edge._from == CONCAT('users/', @userId)
+                            RETURN PARSE_IDENTIFIER(edge._to).key
+                    )
+                    LET onlineFriends = (
+                                FOR session IN sessions
+                                    FILTER session.online == true
+                                    FILTER session.user IN friends
+                                    FOR u IN users
+                                        FILTER u.id == session.user
+                                        RETURN MERGE(u, session)
+                            )
+                
+                    LET posts = (
+                        FOR p IN posts
+                            FILTER p.user IN onlineFriends[*].id
+                            FILTER p.timestamp >= hoursAgo
+                            RETURN p
+                    )
+                    LET likes = (
+                        FOR inter IN interactions
+                            FILTER inter.type == "like"
+                            LET friend = SPLIT(inter._from, "/")[1]
+                            FILTER friend IN onlineFriends[*].id
+                            LET postId = SPLIT(inter._to, "/")[1]
+                            FOR p IN posts
+                                FILTER p.id == postId
+                                FILTER p.timestamp >= hoursAgo
+                                RETURN {
+                                    user: friend,
+                                    post: p
+                                }
+                    )
+                    LET activeUserIds = UNIQUE(
+                        UNION(
+                            posts[*].user,
+                            likes[*].user
+                        )
+                    )
+                    LET onlineFriendIds = UNIQUE(onlineFriends[*].id)
+                    RETURN {
+                        friends: friends,
+                        user: @userId,
+                        posts: posts,
+                        onlineFriends: onlineFriendIds
+                    }
+                """;
+
+        // Bind-Parameter definieren
+        Map<String, Object> bindVars = new HashMap<>();
+        bindVars.put("userId", userId);
+        bindVars.put("hours", hours);
+
+        // Query ausführen
+        ArangoCursor<Map> cursor = db.query(
+                query,
+                Map.class,
+                bindVars,
+                null
+        );
+
+
+        // Ergebnis extrahieren
+        if (cursor.hasNext()) {
+            return (Map<String, Object>) cursor.next();
+        }
+
+        // Fallback, falls keine Daten gefunden wurden
+        return Map.of(
+                "friends", new ArrayList<>(),
+                "posts", new ArrayList<>(),
+                "user", userId,
+                "onlineFriends", new ArrayList<>()
+        );
+    }
+}
+
