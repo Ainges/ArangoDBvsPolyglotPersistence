@@ -23,6 +23,8 @@ public class ArangoDbService implements SocialQueryRepository {
         ArangoDatabase db = arangoDB.db("_system");
 
         // AQL Query definieren
+
+        // Posts von Freunden des gegebenen Nutzers, die aktuell online sind und in der angegebenen Zeit erstellt wurden.
         String query = """
                     LET hoursAgo = DATE_SUBTRACT(DATE_NOW(), @hours, "hours")
                     LET friends = (

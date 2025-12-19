@@ -23,9 +23,9 @@ public class SocialPolyglotPersistanceResource {
             @QueryParam("hours") @DefaultValue("17520") int hours // = 24*365*2 -> 2 years
     ) {
         Instant since = Instant.now().minus(hours, ChronoUnit.HOURS);
-        List<String> friends = socialService.getFriendsOfUser(userId);
-        List<String> onlineFriends = socialService.getOnlineFriendsOfUser(friends);
-        List<Map<String, Object>> posts = socialService.getPostsOfOnlineFriendsSince(onlineFriends, since);
+        List<String> friends = socialService.getFriendsOfUser(userId); // Graph
+        List<String> onlineFriends = socialService.getOnlineFriendsOfUser(friends); // Key-Value
+        List<Map<String, Object>> posts = socialService.getPostsOfOnlineFriendsSince(onlineFriends, since); // Document
 
         return Map.of(
                 "friends", friends,
